@@ -1,6 +1,6 @@
 ---
 title: "Visualize Data"
-author: "Your Name"
+author: "Kaden Robison"
 format: gfm
 execute: 
   echo: true
@@ -24,6 +24,7 @@ Try your code again
 ```{r}
 #| label: setup
 #| include: false
+library(tidyverse)
 
 
 
@@ -37,7 +38,8 @@ Add a setup chunk that loads the tidyverse packages.
 
 
 ```{r}
-#| label: add-label-0
+library(tidyverse)
+
 head(mpg)
 ```
 
@@ -47,8 +49,9 @@ head(mpg)
 Run the code on the slide to make a graph. Pay strict attention to spelling, capitalization, and parentheses!
 
 ```{r}
-#| label: add-label-1
-#add code
+#| label: Making scatter plot 
+ggplot(data = mpg) +
+  geom_point(aes(x  = displ, y = hwy))
 ```
 
 
@@ -57,9 +60,9 @@ Run the code on the slide to make a graph. Pay strict attention to spelling, cap
 Replace this scatterplot with one that draws boxplots. Use the cheatsheet. Try your best guess.
 
 ```{r}
-#| label: add-label-2
+#| label: Making a boxplot
 ggplot(data = mpg) +
-  geom_point(mapping = aes(x = class, y = hwy))
+  geom_boxplot(mapping = aes(x = class, y = hwy))
 ```
 
 
@@ -68,7 +71,9 @@ ggplot(data = mpg) +
 Make a histogram of the `hwy` variable from `mpg`. Hint: do not supply a y variable.
 
 ```{r}
-#| label: add-label-3
+#| label: Making Histogram
+  ggplot(data = mpg) +
+  geom_histogram(mapping = aes(x = hwy))
 ```
 
 ## Your Turn 4
@@ -76,7 +81,9 @@ Make a histogram of the `hwy` variable from `mpg`. Hint: do not supply a y varia
 Use the help page for `geom_histogram` to make the bins 2 units wide.
 
 ```{r}
-#| label: add-label-4
+#| label: Changing binwidth
+ ggplot(data = mpg) +
+  geom_histogram(mapping = aes(x = hwy), binwidth = 2)
 ```
 
 
@@ -85,10 +92,16 @@ Use the help page for `geom_histogram` to make the bins 2 units wide.
 Add `color`, `size`, `alpha`, and `shape` aesthetics to your graph. Experiment.  
 
 ```{r}
-#| label: add-label-5
+#| label: Adding aesthetics
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, 
-                           y = hwy))
+                           y = hwy,
+                           color = class))+
+  labs(x = "Engine Size Displacement",
+       y = "Highway Mileage",
+       color = "Class of Vehicle",
+       title = "The Bigger Engine the Less Milage on Highway")+
+  theme_light()
 ```
 
 ## Help Me
@@ -97,7 +110,7 @@ What do `facet_grid()` and `facet_wrap()` do?
 (run the code, interpret, convince your group)
 
 ```{r}
-#| label: add-label-help-me
+#| label: Making Subplots
 # Makes a plot that the commands below will modify
 q <- ggplot(mpg) + geom_point(aes(x = displ, y = hwy))
 
@@ -113,7 +126,15 @@ q + facet_wrap(~ class)
 Make a bar chart `class` colored by `class`. Use the help page for `geom_bar` to choose a "color" aesthetic for class.
 
 ```{r}
-#| label: add-label-6
+#| label: Making Barplot
+ggplot(data = mpg)+
+  geom_bar(aes(x = class, 
+               fill = drv),
+  position = position_dodge())+
+  labs(x = "Class of Vehicle",
+       y = "Number of Vehicles in Sample",
+       fill = "Type of Drive")+
+  theme_bw()
 ```
 
 ## Quiz
@@ -121,10 +142,16 @@ Make a bar chart `class` colored by `class`. Use the help page for `geom_bar` to
 What will this code do?
 
 ```{r}
-ggplot(mpg) + 
-  geom_point(aes(displ, hwy)) +
-  geom_smooth(aes(displ, hwy)) 
-#  ggsave("example.jpg")
+#| label: plot-with-display-hwy
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point(aes(color = class)) +
+  geom_smooth(color  = "black",
+              se = FALSE,
+              method = "lm") +
+  scale_color_viridis_d()
+
+#ggsave("example.jpg", width = 6, height = 4)
+#  Plot a scatter plot with a trendline
 ```
 
 
